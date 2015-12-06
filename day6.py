@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from collections import namedtuple
+
 instructions = [
     "turn off 660,55 through 986,197",
     "turn off 341,304 through 638,850",
@@ -304,11 +306,13 @@ instructions = [
 ]
 
 
+Coords = namedtuple("Coords", "x y")
+
 CMD_STRINGS = ["turn on", "turn off", "toggle"]
 
 def parse_coords(s):
     parts = s.split(",")
-    return (int(parts[0]), int(parts[1]))
+    return Coords(x=int(parts[0]), y=int(parts[1]))
 
 def parse_line(line):
     for ci, c in enumerate(CMD_STRINGS):
@@ -330,9 +334,9 @@ def execute_instructions(state, turn_on, turn_off, toggle):
         cmd, start_coords, end_coords = parse_line(line)
         op = ops[cmd]
 
-        for x in range(start_coords[0], end_coords[0] + 1):
-            for y in range(start_coords[1], end_coords[1] + 1):
-                op(state, x * 1000 + y)
+        for y in range(start_coords.y, end_coords.y + 1):
+            for x in range(start_coords.x, end_coords.x + 1):
+                op(state, y * 1000 + x)
 
 
 def part1():
