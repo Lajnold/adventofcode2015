@@ -1,2 +1,3 @@
-# adventofcode2015
-My solutions for http://adventofcode.com/ 2015.
+My solutions for Advent of Code 2015.
+
+http://adventofcode.com/
