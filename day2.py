@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 inp = [
     "20x3x11",
     "15x27x5",

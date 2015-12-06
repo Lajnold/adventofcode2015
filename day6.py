@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 instructions = [
     "turn off 660,55 through 986,197",
     "turn off 341,304 through 638,850",
@@ -315,8 +317,8 @@ def parse_line(line):
             rest = line[len(c) + 1:]
             start, through, end = rest.split()
             start_coords = parse_coords(start)
-            end__coords = parse_coords(end)
-            return ci, start_coords, end__coords
+            end_coords = parse_coords(end)
+            return ci, start_coords, end_coords
 
     raise Exception("Unknown command in line: {}".format(line))
 
