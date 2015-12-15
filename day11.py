@@ -16,42 +16,33 @@ def has_forbidden_char(p):
     return False
 
 def has_pairs(p):
-    looking_for = None
-    used_chars = []
+    used = []
+    i = 0
+    while i < len(p) - 1 and len(used) < 2:
+        if p[i] == p[i + 1] and p[i] not in used:
+            used.append(p[i])
+            i += 2
+        else:
+            i += 1
 
-    for i in range(0, len(p)):
-        if (looking_for is None or looking_for != p[i]) and p[i] not in used_chars:
-            looking_for = p[i]
-        elif p[i] == looking_for:
-            used_chars.append(looking_for)
-            looking_for = None
-
-    return len(used_chars) >= 2
+    return len(used) >= 2
 
 def has_straight(p):
-    last_char = p[0]
-    n_straight = 1
-    for i in range(1, len(p)):
-        if p[i] == last_char + 1:
-            n_straight += 1
-            if n_straight == 3:
-                return True
-        else:
-            # Restarting
-            n_straight = 1
-
-        last_char = p[i]
-
+    for i in range(0, len(p) - 2):
+        if p[i] == p[i + 1] - 1 and p[i + 1] == p[i + 2] - 1:
+            return True
     return False
 
 def increment(p, idx):
     p[idx] += 1
-    while idx >= 0 and (p[idx] == MAX_CHAR + 1 or is_forbidden_char(p, idx)):
+    while p[idx] == MAX_CHAR + 1 or is_forbidden_char(p, idx):
         if p[idx] == MAX_CHAR + 1:
+            # Increment prev char(s) and zero this char.
             p[idx] = MIN_CHAR
             idx -= 1
             p[idx] += 1
         else:
+            # Get rid of forbidden char.
             p[idx] += 1
 
 def increment_first_forbidden_char(p):
@@ -65,9 +56,6 @@ def increment_first_forbidden_char(p):
 def is_valid_password(p):
     return not has_forbidden_char(p) and has_pairs(p) and has_straight(p)
 
-# TODO: What optimizations can be done?
-# TODO: *
-
 def part1():
     attempt = [ord(x) for x in day11_input]
     increment_first_forbidden_char(attempt)
@@ -79,7 +67,10 @@ def part1():
 def part2():
     prev_password = "cqjxxyzz"
     attempt = [ord(x) for x in prev_password]
+
+    # Start with next increment so that the previous password isn't accepted again.
     increment(attempt, len(attempt) - 1)
+
     increment_first_forbidden_char(attempt)
     while not is_valid_password(attempt):
         increment(attempt, len(attempt) - 1)
